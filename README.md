@@ -16,7 +16,7 @@ The data sources consist of the public CDISC TMF Reference Model, ChatGPT/GPT-4 
 * The initial results show 100% accuracy on tokenized and stemmed sub-artifact titles defined in the public TMF Reference Model with a Random Forest ensemble model.
 * A pre-trained model augmented with GPT-4 synthetic training data achieves 99.8% accuracy on the TMF training data augmented with the synthetic training data.
 * When tested against 93 unseen field data, not enough to cover all 249 classes, the TMF-trained model scores 40.9% accuracy while the GPT-enhanced model scores 41.9% accuracy. Both better than what I was aiming for. Please note that, only the classes that have only one associated sub-artifact are boosted with 5 additional synthetic sub-artifact titles. The effect of more extensive boosting with synthetic data yet has to be studied. However, the initial results should be considered as a test of the field data’s conformance to the recommendations of the TMF Reference Model, rather than the performance of the machine learning model.
-* Finally, new models are built with the base training data (from the Reference Model and GPT-4) and incrementally increasing set of filed data for training the model. Each sampling rate below indicates the portion of the field data that is added to the base training data for training new models.
+* Finally, new models are built with the base training data (from the Reference Model and GPT-4) and incrementally more field data for training the model. Each sampling rate below indicates the portion of the field data that is added to the base training data for training new models.
 
 The scores are testing scores against unseen data.
 <pre>
