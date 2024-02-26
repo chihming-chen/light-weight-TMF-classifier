@@ -38,8 +38,8 @@ This exercise simulates the process and the effect of sampling and labeling new 
 -	Evaluate the effectiveness of additional synthetic training data.
 ### Outline of project
 
-- [Building the Pre-trained Models]()
-- [Testing against Unseen Field Data]()
+- Jupyter Notebook 1 [Building the Pre-trained Models](TMF%20Classifier.ipynb) (start here)
+- Jupyter Notebook 2 [Testing against Unseen Field Data and Continueous Improvement](TMF%20Classifier%20Field%20Test.ipynb)
 
 #### Contact and for Further Information
 Email: chihming168.chen@gmail.com
