@@ -16,7 +16,6 @@ The data sources consist of the public CDISC TMF Reference Model, OpenAI GPT-4 a
 <img src="https://github.com/chihming-chen/light-weight-TMF-classifier/blob/main/images/class_imbalance.png"  align='center'>
 
 Finally, the pre-trained model is tested with unseen and labeled field data.
-
 #### Oversampling of Minority Classes (or Document Types):
 Despite the distribution of document classes in the training dataset having a good central tendency around the mean and median, the class imbalance will affect some predicting models that have a bias toward the majority classes. Therefore, the training data is augmented with oversampling of minority classes to balance the distribution of document classes so that each class is represented from 15 to 18 instances in the training dataset.
 #### Feature Engineering
@@ -47,6 +46,7 @@ Many of the document types defined in the TMF Reference Model are entity specifi
 
 Therefore, I adopt a "Top-n Accuracy" scoring scheme to better assess the performance of the model. Instead of using the single outcome prediction, I consider the top 3 or top 5 probabilities produced by the model as the prediction of the model. In other words, if one of the top 3 or top 5 prediction candidates matches the correct classification, it is considered a correct classification by the model. The Voting Classifier model achieves an 82.2% top-3 accuracy score, a substantial increase from the 52.2% top-1 accuracy. The model's top-5 accuracy is 88.6%. The chart below shows the top-n accuracy of the base and voting models.
 <img src="https://github.com/chihming-chen/light-weight-TMF-classifier/blob/main/images/top-n-accuracy.png" align='center'>
+
 It is worth noting that the K-nearest Neighbors model jumps to be the best, among the base models, top-3 and top-5 accuracy model. It suggests the KNN model excels in assessing the runner-up candidates better than the other base models.
 #### Model Performance:
 <img src="https://github.com/chihming-chen/light-weight-TMF-classifier/blob/main/images/accuracy_vs_time.png" align='center'>
