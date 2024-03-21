@@ -20,17 +20,18 @@ It may appear to the contrary, machine learning algorithms do not natively work 
 
 <img src="https://github.com/chihming-chen/light-weight-TMF-classifier/blob/main/images/TF-IDF_distribution.png" align='center'>
 
+The TF-IDF scores have a great central tendency - typically beneficial for machine learning models to make unbiased predictions. There are some 'outliers' exceeding a statistical upper bound. However, these 'outliers' are welcome signs indicating some of n-grams are extremely distinctive for idenfyinig docment types.
 
 #### Model Selections
-Four base models, K-nearest Neighbors, Logistic Regression, Support Vector Machine, and Random Forest classifiers are selected and individually tuned with the 'best' hyperparameters to classify (or predict) the document types, given the document titles as input. Each model has its own way to tackle this 200-class classification problem - either by the proximality to other data points, by the separabiilty of data clusters, or by making successive rule-based binary decisions. Common to these models, they provide confidence scores (probabilities) along with their sole-winner predictions. A final model that aggregates the base models' predictions and makes the final prediction outcome.
+Four base models, K-nearest Neighbors, Logistic Regression, Support Vector Machine, and Random Forest classifiers are selected and individually tuned with the 'best' hyperparameters to classify (or predict) the document types, given the document titles as input. Each model has its own way to tackle this 200-plus-class classification problem - either by the proximality to other data points, the separability of data clusters, or by making successive rule-based binary decisions. Common to these models, they provide confidence scores (probabilities) along with their sole-winner predictions. 
 
-Adopting the "wisdom of the crowd" principle, a final Voting Classifier aggregates the base models' predictions, specifically, the confidence scores, and makes the final prediction based on the (weighted) total probabilities. The document class that has the highest weighted, aggregated probability from all base models is the final prediction. The final prediction may be the same as the majority vote, or it may be totally different from any of the base models' first-choice predictions. It is possible that a runner-up prediction candidate becomes the final prediction of the voting classifier.
-### Findings
+Adopting the "wisdom of the crowd" principle, a final Voting Classifier aggregates the base models' predictions, specifically, the confidence scores, and makes the final prediction based on the (weighted) total probabilities. The document class that has the highest weighted, aggregated probability from all base models is the final prediction. The final prediction may be the same as the base models' majority vote, or it may be totally different from any of the base models' first-choice predictions. It is possible that a runner-up prediction candidate becomes the final prediction of the voting classifier.
+### Model Evaluation
 #### Training Scores
-The initial results show 99.3% to 99.5% accuracy, among the four base models, on tokenized, lemmatized and stemmed sub-artifact titles defined in the public TMF Reference Model with additional synthetic training data.
+All base models achieve 99.3% to 99.5% accuracy on the training data. It is a desirable outcome since I expect if the TMFs collected from a clinical trial that adopts the TMF Reference Model, these models should achieve almost 100% accuracy.
 
 #### Test Scores on Unseen Data
-When tested against 439 unseen field data, the TMF Reference Model-trained model scores 52.16% accuracy - much better than I originally expected. This is a great result, considering a random guess would achieve only 0.5% accuracy.  
+When tested against 439 unseen field data from a real clinical trial, the TMF Reference Model-trained model scores 52.16% accuracy. It is a big drop from the accuracy score on the training data. However, it is much better than I originally set my goal (30% to 40%). This is a great result, considering a random guess among 200+ classes would achieve not more than 0.5% accuracy.  
 <pre>
                        Train score	Test score	Avg. model eval time
 Classifier			
@@ -42,24 +43,24 @@ Voting Classifier	  0.995387	0.521640	19.444089
 </pre>
 
 #### Top-n Accuracy:
-Many of the document types defined in the Reference Model are entity specific. For example, to show a person is qualified to perform a clinical trial related task, the documentation showing the qualification of the person, such as a medical license or Curriculum Vitae is collected and becomes a part of the TMFs. The Reference Model defines 'Principal Investigator's Curriculum Vitae (CV)', 'Sub-investigator’s CV', 'Coordinating investigator's CV', and 'Committee Member's CV' as different document types. However, in practice, the position of the person rarely shows up on a CV. Another example, for 'User Requirement Specifications' or 'Audit Certificate', they all belong to different document classes depending on what kinds of systems are involved. And, again, in real practice, the types of systems may not always show up in the title of a document. Simply put, the title of a document alone does not always be able to distinguish these entity-specific document types.
+Many of the document types defined in the Reference Model are entity specific. For example, to show a person is qualified to perform a clinical trial related task, the documentation showing the qualification of the person, such as a medical license or Curriculum Vitae is collected and becomes a part of the TMFs. The Reference Model defines 'Principal Investigator's Curriculum Vitae (CV)', 'Sub-investigator’s CV', 'Coordinating investigator's CV', and 'Committee Member's CV' as different document types. However, in practice, the position of the person rarely shows up on a CV. Another example, for 'User Requirement Specifications' or 'Audit Certificate', they all belong to different document classes depending on what kinds of systems are involved. Again, in real practice, the types of systems may not always show up in the title of a document. Simply put, the title of a document alone does not always be able to distinguish these entity-specific document types.
 
-Therefore, I adopt a "Top-n Accuracy" scoring scheme to better assess the performance of the model. Instead of using the single outcome prediction, I consider the top 3 or top 5 probabilities produced by a model as the prediction of the model. Specifically, if one of the top-3 or top-5 prediction candidates matches the correct classification, it is considered a correct classification by the model. 
+Therefore, I adopt a "Top-n Accuracy" scoring scheme to better assess the performance of the model under these circumstances. Instead of using the single outcome prediction, I consider the top 3 or top 5 probabilities produced by a model as the prediction of the model. Specifically, if one of the top-3 or top-5 prediction candidates matches the correct classification, it is considered a correct classification by the model. (This is the main reason why I have chosen these base models.)
 
-The Voting Classifier model achieves an 82.2% top-3 accuracy score, a substantial increase from the 52.2% top-1 accuracy, and it's much better than the baseline top-3 accuracy of 51.9%. The model's top-5 accuracy is 88.6% outpeforming the dummy classifier's top-5 accuracy of 59.9% with a great margin (A dummy classifer always predicts the top-n majority classes in a dataset). The chart below shows the top-n accuracy of the base models and the final voting classifier.
+The final Voting Classifier model achieves an 82.2% top-3 accuracy score, a substantial increase from the 52.2% top-1 accuracy, and it's much better than the baseline top-3 class distribution of 51.9%. The model's top-5 accuracy is 88.6% outperforming the dummy classifier's top-5 accuracy of 59.9% with a great margin (A dummy classifier always predicts the top-n majority classes in a dataset). The chart below shows the top-n accuracy of the base models and the final voting classifier.
 <img src="https://github.com/chihming-chen/light-weight-TMF-classifier/blob/main/images/top-n-accuracy.png" align='center'>
 
 It is worth noting that the K-nearest Neighbors model jumps to be the best, among the base models, top-3 and top-5 accuracy model. It suggests the KNN model excels in assessing the runner-up prediction candidates better than the other base models.
 #### Model Performance:
+The voting classifier, an ensemble of the base models, outperforms the individual base models in all aspects. The K-nearest Neighbors model is the winner in top-3 and top-5 accuracy scores among the base models. It top-3 and top-5 accuracy comes close to that of the voting classifier. However, it is the slowest model as depicted below.
+
 <img src="https://github.com/chihming-chen/light-weight-TMF-classifier/blob/main/images/accuracy_vs_time.png" align='center'>
 
-### Next steps
--	Expanding the scale of synthetic data 
--	Additional field data for testing, model building, and model evaluation
--	Model selection and hyperparameter tuning
-### Outline of project
-- Jupyter Notebook 1 [Building the Pre-trained Models](TMF%20Classifier.ipynb) (start here)
-- Jupyter Notebook 2 [Testing against Unseen Field Data and Continuous Improvement](TMF%20Classifier%20Field%20Test.ipynb)
+### Conclusions and Further Considerations
+This feasibility study has answered the research question I set out to solve. It shows that using the title of a document to classify the document, among 200+ possibilities in the context of CDISC Trial Master Files, is not only feasible but achieves a great result. Over 52% of the 439 documents from a real clinical trial can be correctly classified by their titles alone. However, this has its limit and just a first step towards a more practical solution. From this experiment, I also learned:
+-	The 'wisdom of the crowd' principal and approach prove to be beneficial to tackle this classification problem. The final voting classifier outperforms all individual base models, including the Random Forest model that itself is an ensemble of Decision Tree models. Additional base models, such as a Recurrent Neural Network model, can be explored and incorporated to see whether they increase the model predictive power.
+-	The almost-cut-in-half drop in the accuracy scores between the training dataset and unseen data strongly suggests a mismatch between the TMF Reference Model and the field data. Knowing that the TMF Reference Model is not meant to be a comprehensive list of titles of documents produced in clinical trials, additional real-word training data is needed before putting the model in real practice.
+-	Since a large portion of the document types are entity specific, additional input features, tools and techniques are needed to recognize the entities involved for specific document types in order to produce an acceptable top-1 predictive model. Named Entity Recognition and external database look up are good directions to investigate.
 
 #### Contact and for Further Information
 Email: chihming168.chen@gmail.com
