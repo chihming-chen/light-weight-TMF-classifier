@@ -62,6 +62,7 @@ This feasibility study has answered the research question I set out to solve. It
 -	The 'wisdom of the crowd' principle and approach prove to be beneficial to tackle this classification problem. The final voting classifier outperforms all individual base models, including the Random Forest model that itself is an ensemble of Decision Tree models. Additional base models, such as a Recurrent Neural Network model, can be explored and incorporated to see whether they increase the model predictive power.
 -	The almost-cut-in-half drop in the accuracy scores between the training dataset and unseen data strongly suggests a mismatch between the field data and the TMF Reference Model. Knowing that the TMF Reference Model is not a comprehensive list of titles of documents produced in clinical trials, additional real-word training data is needed before putting the model in real practice.
 -	Since a large portion of the TMF document types are entity specific, additional input features, tools and techniques are needed to recognize the entities involved for specific document types in order to produce an acceptable top-1 predictive model. Named Entity Recognition and external database look up are good directions to investigate.
-
+### Technical Implementation
+[Jupytor Notebook](https://github.com/chihming-chen/light-weight-TMF-classifier/blob/c761d7d9d8bd90a1eb9799b3b9225b8fe025a7b0/TMF%20Classifier.ipynb)
 #### Contact and for Further Information
 Email: chihming168.chen@gmail.com
