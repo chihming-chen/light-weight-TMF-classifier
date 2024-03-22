@@ -29,18 +29,18 @@ Four base models, K-nearest Neighbors, Logistic Regression, Support Vector Machi
 Adopting the "wisdom of the crowd" principle, a final Voting Classifier aggregates the base models' predictions, specifically, the confidence scores, and makes the final prediction based on the (weighted) total probabilities. The document class that has the highest weighted, aggregated probability from all base models is the final prediction. The final prediction may be the same as the base models' majority vote, or it may be totally different from any of the base models' first-choice predictions. It is possible that a runner-up prediction candidate becomes the final prediction/classification of the voting classifier.
 ### Model Evaluation
 #### Training Scores
-All base models achieve 99.3% to 99.5% accuracy on the training data. It is a desirable outcome since I expect if the TMFs collected from a clinical trial that adopts the TMF Reference Model, these models should achieve almost 100% accuracy.
+All base models achieve 99.2% to 99.5% accuracy on the training data. It is a desirable outcome since I expect if the TMFs collected from a clinical trial that adopts the TMF Reference Model, these models should achieve almost 100% accuracy.
 
 #### Test Scores on Unseen Data
-When tested against 439 unseen field data from a real clinical trial, the TMF Reference Model-trained model scores 52.16% accuracy. It is a big drop from the accuracy score on the training data. However, it is much better than I originally set my expectations (30% to 40%). This is a great result, considering a random guess among 200+ classes would achieve not more than 0.5% accuracy.  The Logistic Regression model is the only base model that crosses the 50% mark on the unseen data.
+When tested against 439 unseen field data from a real clinical trial, the TMF Reference Model-trained model scores 59.68% accuracy. It is a big drop from the accuracy score on the training data. However, it is much better than I originally set my expectations (30% to 40%). This is a great result, considering a random guess among 200+ classes would achieve not more than 0.5% accuracy.  The Logistic Regression model is the only base model that crosses the 50% mark on the unseen data.
 <pre>
-                       Train score	Test score	Avg. model eval time
+	                     Train score	Test score	Avg. model eval time
 Classifier			
-K-Nearest Neighbors	  0.995387	0.325740	0.289554
-Logistic Regression	  0.995387	0.501139	109.099880
-Support Vecor Machine	  0.993081	0.451025	1.681580
-Random Forest	          0.995387	0.312073	27.978212
-Voting Classifier	  0.995387	0.521640	19.444089
+K-Nearest Neighbors	  0.994728	0.558087	0.296603
+Logistic Regression	  0.995387	0.548975	308.195169
+Support Vecor Machine	  0.992092	0.487472	2.244191
+Random Forest	          0.995387	0.414579	24.795009
+Voting Classifier	  0.995387	0.596811	63.000406  
 </pre>
 
 #### Top-n Accuracy:
