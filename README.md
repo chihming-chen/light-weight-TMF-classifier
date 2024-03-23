@@ -28,6 +28,7 @@ Four base models, K-nearest Neighbors, Logistic Regression, Support Vector Machi
 
 Adopting the "wisdom of the crowd" principle, a final Voting Classifier aggregates the base models' predictions, specifically, the confidence scores, and makes the final prediction based on the (weighted) total probabilities. The document class that has the highest weighted, aggregated probability from all base models is the final prediction. The final prediction may be the same as the base models' majority vote, or it may be totally different from any of the base models' first-choice predictions. It is possible that a runner-up prediction candidate becomes the final prediction/classification of the voting classifier.
 ### Model Evaluation
+Accuracy is selected as the primary metric for evaluating the performance of the models for its interpretibility and computational efficiency. Also, there is no harm in making wrong classifications as the prediction outcome is expected to be reviewed by a human. More precisely, Top-n Accuracy (further explained later) is the main metric for evaluation for this 200-plus-class classification problem.
 #### Training Scores
 All base models achieve 99.4% to 99.5% accuracy on the training data. It is a desirable outcome since I expect if the TMFs collected from a clinical trial that adopts the TMF Reference Model, these models should achieve almost 100% accuracy.
 
