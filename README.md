@@ -30,10 +30,10 @@ Adopting the "wisdom of the crowd" principle, a final Voting Classifier aggregat
 ### Model Evaluation
 Accuracy is selected as the primary metric for evaluating the performance of the models for its interpretibility and computational efficiency. Also, there is no harm in making wrong classifications as the prediction outcome is expected to be reviewed by a human. More precisely, Top-n Accuracy (further explained later) is the main metric for evaluation for this 200-plus-class classification problem.
 #### Training Scores
-All base models achieve 99.4% to 99.5% accuracy on the training data. It is a desirable outcome since I expect if the TMFs collected from a clinical trial that adopts the TMF Reference Model, these models should achieve almost 100% accuracy.
+The test dataset contains 1,616 unique document titles that are oversampled to 3,035 titles to balance the document classes. Class balance minimize a model's bias towardss the majority class in input data. All four base models achieve 99.4% to 99.5% accuracy on the training data after hyperparameter fine-tuning.  It is a desirable outcome, with a grain of salt, since I expect if the TMFs collected from a clinical trial that well adopts the TMF Reference Model, these models should achieve a very high accuracy.
 
 #### Test Scores on Unseen Data
-When tested against 439 unseen field data from a real clinical trial, the TMF Reference Model-trained model scores 53.75% accuracy. It is a big drop from the accuracy score on the training data. However, it is much better than I originally set my expectations (30% to 40%). This is a great result, considering a random guess among 200+ classes would achieve not more than 0.5% accuracy.  The Logistic Regression model is the only base model that crosses the 50% mark on the unseen data.
+When tested against 439 unseen field data from a real clinical trial, the TMF Reference Model-trained model scores 53.75% accuracy. It is a big drop from the 99.5% accuracy score on the training data. It suggests significant mismatch between the test data from the TMF Reference Model and the field data. However, it is much better than I originally set my expectations (30% to 40%). I consider this as a great result, considering a random guess among 200+ classes would achieve not more than 0.5% accuracy.  The Logistic Regression and Support Vector Machine base models crosse the 50% mark on the unseen data.
 <pre>
                         Train score	Test score	Avg. model eval time
 Classifier			
@@ -41,13 +41,12 @@ K-Nearest Neighbors	  0.995387	0.410023	0.826210
 Logistic Regression	  0.994069	0.571754	5.770547
 Support Vecor Machine	  0.994069	0.578588	2.391673
 Random Forest	          0.995387	0.407745	1.378553
-Voting Classifier	  0.995387	0.537585	2.284712	
 </pre>
 
 #### Top-n Accuracy:
 Many of the document types defined in the Reference Model are entity specific. For example, to show a person is qualified to perform a clinical trial related task, the documentation showing the qualification of the person, such as a medical license or Curriculum Vitae is collected and becomes a part of the TMFs. The Reference Model defines 'Principal Investigator's Curriculum Vitae (CV)', 'Sub-investigator’s CV', 'Coordinating investigator's CV', 'Laboratory Staff's CV' and 'Committee Member's CV' as different document types. However, in practice, the position of the qualified person rarely shows up on a CV. Another example, for 'User Requirement Specifications' or 'Audit Certificate', they all belong to different document classes depending on what kinds of systems are involved. Again, in real practice, the types of systems may not always show up in the title of a document. Simply put, the title of a document alone does not always be able to distinguish these entity-specific document types.
 
-Therefore, I adopt a "Top-n Accuracy" scoring scheme to better assess the performance of the model under these circumstances. Instead of using the single outcome prediction, I consider the top 3 or top 5 probabilities produced by a model as the prediction of the model. Specifically, if one of the top-3 or top-5 prediction candidates matches the correct classification, it is considered a correct classification by the model. (This is the main reason why I have chosen these base models.)
+Therefore, I adopt a "Top-n Accuracy" scoring scheme to better assess the performance of the model under these circumstances. Instead of using the single outcome prediction, I consider the top 3 or top 5 probabilities produced by a model as the prediction of the model. Specifically, if one of the top-3 or top-5 prediction candidates matches the correct classification, it is considered a correct classification by the model.
 <pre>
 
 			Top-1 Accuracy	Top-3 Accuracy	Top-5 Accuracy
@@ -58,11 +57,11 @@ Support Vector Machine	0.578588	0.726651	0.806378
 Random Forest	        0.407745	0.676538	0.738041
 Voting Classifier	0.537585	0.851936	0.888383	
 </pre>
-The final Voting Classifier model achieves an 85.2% top-3 accuracy score, a substantial increase from the 53.8% top-1 accuracy, and it's much better than the baseline top-3 class distribution of 51.9%. The model's top-5 accuracy is 88.8% outperforming the dummy classifier's top-5 accuracy of 59.9% with a great margin (A dummy classifier always predicts the top-n majority classes in a dataset). The chart below shows the top-n accuracy of the base models and the final voting classifier.
+The final Voting Classifier model achieves an 85.2% top-3 accuracy score, a substantial increase from the 53.8% top-1 accuracy. It's also much better than the baseline top-3 class distribution of 51.9%. The model's top-5 accuracy is 88.8% outperforming the baseline top-5 accuracy of 59.9% with a great margin. The chart below shows the top-n accuracy of the base models and the final voting classifier.
 
 <img src="https://github.com/chihming-chen/light-weight-TMF-classifier/blob/main/images/top-n-accuracy.png" align='center'>
 
-It is worth noting that the K-nearest Neighbors (KNN) model jumps to be the best, among the base models, top-3 and top-5 accuracy model. It suggests the KNN model excels in assessing the runner-up prediction candidates better than the other base models.
+It is worth noting that the K-nearest Neighbors (KNN) model jumps from the worst Top-1 accuracy model to be the best, among the base models, top-3 and top-5 accuracy model. It suggests the KNN model excels in assessing the runner-up prediction candidates better than the other base models.
 #### Model Performance:
 The voting classifier, an ensemble of the base models, outperforms the individual base models in all aspects. The KNN model is the winner in top-3 accuracy scores among the base models but is slightly overtaken by the Support Vector Model in top-5 accuracy. The KNN model is the slowest model as depicted below.
 
